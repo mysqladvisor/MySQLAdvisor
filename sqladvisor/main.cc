@@ -23,6 +23,7 @@
 #define CHUNK_SIZE 10000
 #define DBNAME "information_schema"
 #define GROUT_NAME "sqladvisor"
+//设置SQL语句的分隔符
 #define SEP ';'
 #define EXPLAIN_ROWS 8
 #define INDEX_NON_UNIQUE 1
@@ -32,6 +33,7 @@
 #define INDEX_CARDINALITY 6
 #define SHOW_ROWS 4
 #define AFFECT_ROWS 0
+#define SQL_NUM_ONE_LINE 10
 
 using std::set;
 using std::queue;
@@ -1330,6 +1332,23 @@ int g_option_keyfile_parse(GKeyFile *keyfile, const char *ini_group_name,
     return ret;
 }
 
+//判断分割出来的sql语句是否为不定数量空格的函数
+int _ifblank(char judge[]){
+    char ch;
+    char true_[20];
+    int i,j;
+    for(i=0,j=0;i<strlen(judge);i++){
+        if(judge[i]==' ')
+            continue;
+        else{
+            true_[j]=judge[i];
+            j++;
+        }
+    }
+    true_[j]='\0';
+    return strlen(true_);
+}
+
 int main(int argc, char **argv) {
 
     LEX *sql_lex;
@@ -1364,6 +1383,8 @@ int main(int argc, char **argv) {
         exit(1);
     }
     g_option_context_free(context);
+
+    int len_query;
     if (options.configfile != NULL) {
         //load config file
         keyfile = g_key_file_new();
@@ -1377,6 +1398,15 @@ int main(int argc, char **argv) {
             g_key_file_free(keyfile);
             sql_print_error("read config file failed:%s\n", error->message);
         }
+    }else if(options.query != NULL) {
+        gchar *delimiter = g_strnfill(1, SEP);
+        gchar **query = g_strsplit(options.query[0], delimiter, SQL_NUM_ONE_LINE);  //按";"分割SQL语句
+        g_strfreev(options.query);
+        options.query = query;
+        len_query = _ifblank(options.query[g_strv_length(options.query) - 1]); //判断最后一个';'后是否还有字符串或是不定数量的空格，若是不定数量的空格则len_query为0
+        if (len_query == 0) {
+            options.query[g_strv_length(options.query) - 1] = NULL; //将分割出来的最后一个为不定数量的空格删除
+        }
     }
 
     if (options.username == NULL || options.password == NULL
@@ -1386,6 +1416,8 @@ int main(int argc, char **argv) {
         return -1;
     }
     while ((query = options.query[i]) != NULL) {
+        sql_print_information("SQL语句 %d : %s\n", i, query);
+
         sql_lex = sql_parser(query, options.dbname);
 
         if (sql_lex == NULL) {

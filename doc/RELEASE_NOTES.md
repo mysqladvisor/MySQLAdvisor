@@ -6,7 +6,10 @@
     - 添加where 条件中的like处理
     - 优化order by 逻辑，忽略order by primary key情况
     - 输出索引建议前，增加判断索引是否已存在
+    - 增加可以在命令行-q参数后输入多条以分号";"结尾的sql语句的功能，不再是只能处理一条sql语句。 By nwsuafzq 
 - Bugs Fixed
     - 修复SQL无法处理中文问题
     - 修复字段多次出现在where条件中从而导致多次出现在索引列中问题
     - 修复在find_best_index()函数中，对mysql api中的result对象提前free, 导致指针失效问题
+    - 修复命令行一次只能处理一条sql语句。By nwsuafzq
+    - 修复多条语句时最后一条sql语句后若有分号";" 后面会分割出一个空的语句。 By nwsuafzq
