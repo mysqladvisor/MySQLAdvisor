@@ -1,0 +1,1 @@
+/usr/bin/c++   -g    CMakeFiles/sqladvisor.dir/main.cc.o  -o sqladvisor  -L/usr/local/sqlparser/lib -rdynamic -lsqlparser-debug -lperconaserverclient_r -lglib-2.0 -Wl,-rpath,/usr/local/sqlparser/lib 
