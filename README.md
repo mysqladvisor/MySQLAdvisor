@@ -20,6 +20,8 @@ MySQLAdvisor是原SQLAdvisor项目转移到此，原先由美团点评公司技�
 
 ### 四、MySQLAdvisor的需求及Bug反馈方式
 
-如果用户在实际的应用场景中对MySQLAdvisor有新的功能需求，或者在使用MySQLAdvisor的过程中发现了bug，在github上进行交流或是PullRequest，也可以在讨论组/群进行反馈，我们会及时维护,**QQ群号：947480182**。
+如果用户在实际的应用场景中对MySQLAdvisor有新的功能需求，或者在使用MySQLAdvisor的过程中发现了bug，在github上进行交流或是PullRequest，也可以在讨论组/群进行反馈，我们会及时维护。
+
+**QQ群号：947480182**
 
 ![QQ](./doc/img/qq.png)
